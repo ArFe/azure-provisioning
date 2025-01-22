@@ -15,7 +15,7 @@ const provisioningHost = 'global.azure-devices-provisioning.net';
 const idScope = '{ID scope}';
 const deviceId = '{Device ID}';
 const symmetricKey = '{SAS Primary key}';
-const expiration = 60 * 60 * 24 * 7; // 1 week
+const expiration = 60 * 24 * 7; // 1 week in number of minutes
 const provisioningSecurityClient = new SymmetricKeySecurityClient(deviceId, symmetricKey);
 const provisioningClient = ProvisioningDeviceClient.create(provisioningHost, idScope, new ProvisioningTransport(), provisioningSecurityClient);
 
@@ -23,8 +23,7 @@ const generateSasToken = function(resourceUri, signingKey, policyName, expiresIn
   resourceUri = encodeURIComponent(resourceUri);
 
   // Set expiration in seconds
-  const expires = (Date.now() / 1000) + expiresInMins * 60;
-  expires = Math.ceil(expires);
+  const expires = Math.ceil((Date.now() / 1000) + expiresInMins * 60);
   const toSign = resourceUri + '\n' + expires;
 
   // Use crypto
